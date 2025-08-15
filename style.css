@@ -35,6 +35,7 @@ header h1 {
   gap: 1rem;
 }
 
+
 .file-label {
   position: relative;
   overflow: hidden;
@@ -104,6 +105,7 @@ section h2 {
 }
 
 #gauge-section {
+  
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -355,4 +357,46 @@ main section {
 #campaign-table tbody tr.current-week-row {
   background-color: #fff5e6;
   border-left: 4px solid #2f80ed;
+}
+
+
+/* Gauge info styles */
+.gauge-info {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.total-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2f80ed;
+}
+
+.small-note {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.status-badge.low {
+  background-color: #f5c342;
+  color: #fff;
+}
+
+.status-badge.default {
+  background-color: #76c893;
+  color: #fff;
+}
+
+.status-badge.high {
+  background-color: #eb5757;
+  color: #fff;
 }
