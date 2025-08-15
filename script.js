@@ -2,15 +2,13 @@
  * Marketing Schedule Tracker
  *
  * This script powers a simple dashboard for tracking mail campaigns and their
- * follow‑up activities. It parses a CSV file supplied by the user or, if
- * configured on the server, automatically fetches a CSV from a Google
- * Sheets document via a Vercel serverless function. The dashboard derives
- * additional follow‑up events and renders reminders, a progress gauge,
- * calendar, weekly mail counts and a campaign table. All logic is
- * contained in this file for ease of deployment as a static web page.
+ * follow‑up activities. It parses a CSV file supplied by the user, derives
+ * additional follow‑up events, and renders reminders, a progress gauge,
+ * calendar, weekly mail counts and a campaign table. All logic is contained
+ * in this file for ease of deployment as a static web page.
  */
 
-// When the DOM is ready, attach listeners, optionally load the sheet
+// When the DOM is ready, attach listeners and initialize defaults
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('file-input');
   const toggleCostBtn = document.getElementById('toggle-cost');
@@ -23,36 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       col.style.display = show ? '' : 'none';
     });
   });
-
-  // Attempt to load data from the serverless API on page load. If the
-  // request fails (e.g. environment variables aren't configured or the
-  // sheet isn't public) the dashboard will remain empty until a CSV is
-  // uploaded manually by the user.
-  loadSheetFromAPI();
 });
-
-/**
- * Attempt to fetch a CSV from the /api/sheet endpoint. If the fetch
- * succeeds, parse the CSV and populate the dashboard. Errors are
- * silently ignored so that users can still manually load a file if
- * automatic loading isn't configured.
- */
-async function loadSheetFromAPI() {
-  try {
-    const resp = await fetch('/api/sheet');
-    if (!resp.ok) {
-      throw new Error(`HTTP ${resp.status}`);
-    }
-    const text = await resp.text();
-    if (!text || text.trim() === '') return;
-    const data = parseCSV(text);
-    const records = transformRecords(data);
-    const tasks = deriveTasks(records);
-    updateDashboard(records, tasks);
-  } catch (err) {
-    console.warn('Could not load sheet from API', err);
-  }
-}
 
 /**
  * Handle CSV file selection: read the file and trigger parsing and UI update
@@ -166,9 +135,7 @@ function transformRecords(data) {
         .map((s) => s.trim())
         .filter((s) => s);
     }
-    const noMail =
-      tags.some((t) => t.toLowerCase() === 'nomail') ||
-      (channels.length > 0 && !channels.some((c) => c.toLowerCase() === 'mail'));
+    const noMail = tags.some((t) => t.toLowerCase() === 'nomail') || (channels.length > 0 && !channels.some((c) => c.toLowerCase() === 'mail'));
     records.push({
       date,
       campaign,
@@ -489,9 +456,7 @@ function updateCampaignTable(records, currentWeekStart, currentWeekEnd) {
   records.forEach((r) => {
     const tr = document.createElement('tr');
     // Highlight if mail or follow‑up falls in current week
-    const inWeek =
-      (r.date >= currentWeekStart && r.date <= currentWeekEnd) ||
-      (r.followUpDate >= currentWeekStart && r.followUpDate <= currentWeekEnd);
+    const inWeek = (r.date >= currentWeekStart && r.date <= currentWeekEnd) || (r.followUpDate >= currentWeekStart && r.followUpDate <= currentWeekEnd);
     if (inWeek) {
       tr.classList.add('current-week-row');
     }
