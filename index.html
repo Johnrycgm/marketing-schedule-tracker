@@ -25,28 +25,36 @@
     </header>
     <main>
       <section id="reminders">
-        <div class="reminder-section">
+        <div class="reminder-section card">
           <h2>This Week</h2>
           <ul id="current-week-tasks"></ul>
         </div>
-        <div class="reminder-section">
+        <div class="reminder-section card">
           <h2>Next Week</h2>
           <ul id="next-week-tasks"></ul>
         </div>
       </section>
-      <section id="gauge-section">
-        <h2>Monthly Mail Target (9k–10k)</h2>
+      <div class="grid-two">
+      <section id="gauge-section" class="card">
+        <h2>Monthly Summary</h2>
+        <!-- Display the monthly total and target status before the progress bar -->
+        <div class="gauge-info">
+          <span id="monthly-total" class="total-number"></span>
+          <span class="small-note">target 9k–10k</span>
+          <span id="monthly-status" class="status-badge"></span>
+        </div>
         <div id="gauge-container">
           <div id="gauge-bar">
             <span id="gauge-label"></span>
           </div>
         </div>
       </section>
-      <section id="calendar-section">
+      <section id="calendar-section" class="card">
         <h2>Calendar</h2>
         <div id="calendar"></div>
       </section>
-      <section id="weekly-section">
+      </div>
+      <section id="weekly-section" class="card">
         <h2>Weekly Mail Count</h2>
         <table id="weekly-table">
           <thead>
@@ -58,7 +66,7 @@
           <tbody></tbody>
         </table>
       </section>
-      <section id="campaign-section">
+      <section id="campaign-section" class="card">
         <h2>Campaign Schedule</h2>
         <table id="campaign-table">
           <thead>

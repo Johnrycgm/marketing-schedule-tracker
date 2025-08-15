@@ -11,238 +11,10 @@
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
-  background-color: #f5f6fa;
+  /* Soft gradient background for a modern look */
+  background: linear-gradient(to bottom, #f9fafb, #edf3f7);
   color: #333;
 }
-
-header {
-  background-color: #2f80ed;
-  color: #fff;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-#controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-
-.file-label {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-  background-color: #fff;
-  color: #2f80ed;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.file-label input {
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-#toggle-cost {
-  background-color: #fff;
-  color: #2f80ed;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-#toggle-cost.active {
-  background-color: #2f80ed;
-  color: #fff;
-}
-
-main {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-section h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #2f80ed;
-}
-
-#reminders {
-  display: flex;
-  gap: 2rem;
-}
-
-.reminder-section ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.reminder-section li {
-  margin-bottom: 0.25rem;
-  padding: 0.25rem 0;
-}
-
-#gauge-section {
-  
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-#gauge-container {
-  background-color: #e0e0e0;
-  border-radius: 4px;
-  height: 1.25rem;
-  position: relative;
-  overflow: hidden;
-}
-
-#gauge-bar {
-  background-color: #76c893;
-  height: 100%;
-  width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  border-radius: 4px;
-  transition: width 0.5s ease;
-}
-
-#gauge-bar.out-of-range {
-  background-color: #f57c00;
-}
-
-#gauge-label {
-  padding-right: 0.5rem;
-  color: #fff;
-  font-weight: 600;
-}
-
-#calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-  background-color: #fff;
-  padding: 0.5rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.day {
-  min-height: 5rem;
-  border-radius: 4px;
-  padding: 0.25rem;
-  background-color: #fafafa;
-  display: flex;
-  flex-direction: column;
-}
-
-.day.other-month {
-  opacity: 0.5;
-}
-
-.day.today {
-  border: 2px solid #2f80ed;
-}
-
-.day .date {
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.icons span {
-  margin-right: 0.25rem;
-}
-
-#weekly-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#weekly-table th,
-#weekly-table td {
-  padding: 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-#weekly-table tr:last-child td {
-  border-bottom: none;
-}
-
-#campaign-table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
-}
-
-#campaign-table th,
-#campaign-table td {
-  padding: 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-#campaign-table tr:last-child td {
-  border-bottom: none;
-}
-
-#campaign-table tbody tr:hover {
-  background-color: #f0f4ff;
-}
-
-#campaign-table td {
-  white-space: nowrap;
-}
-
-.badge {
-
-display: inline-block;
-  paddng: 0.15rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.badge.mail {
-  background-color: #2f80ed;
-}
-
-.badge.nomail {
-  background-color: #f57c00;
-}
-
-footer {
-  padding: 1rem;
-  font-size: 0.75rem;
-  color: #666;
-  text-align: center;
-}
-/* === Custom enhancements for professional design === */
 
 /* Card styling for main sections */
 main section {
@@ -254,7 +26,7 @@ main section {
 
 /* Enhanced reminders styling */
 .reminder-item {
-  background-color: #f7f9fc;
+  background-color: #f9fafb;
   border-left: 4px solid #2f80ed;
   border-radius: 4px;
   padding: 0.5rem;
@@ -310,9 +82,24 @@ main section {
 }
 
 /* Calendar styles adjustments */
+.day {
+  position: relative;
+  background-color: #fafafa;
+  border-radius: 4px;
+  padding: 0.25rem;
+  min-height: 6rem;
+  display: flex;
+  flex-direction: column;
+}
+
 .day.current-week {
-  background-color: #fff5e6;
-  border: 1px solid #ffe0b2;
+  /* Highlight current week with a subtle ring */
+  box-shadow: 0 0 0 2px #90caf9 inset;
+}
+
+.day.today {
+  /* Highlight today with a primary ring */
+  box-shadow: 0 0 0 2px #2f80ed inset;
 }
 
 .date-number {
@@ -341,24 +128,303 @@ main section {
 }
 
 .task-item .types .mail {
-  color: #2f80ed;
+  background-color: #2f80ed;
+  color: #ffffff;
+  padding: 0 0.25rem;
+  border-radius: 4px;
 }
 
 .task-item .types .text {
-  color: #27ae60;
+  background-color: #27ae60;
+  color: #ffffff;
+  padding: 0 0.25rem;
+  border-radius: 4px;
 }
 
 .task-item .types .voicemail {
-  color: #b27aca;
+  background-color: #b27aca;
+  color: #ffffff;
+  padding: 0 0.25rem;
+  border-radius: 4px;
 }
 
 /* Highlight current week rows in tables */
 #weekly-table tbody tr.current-week-row,
 #campaign-table tbody tr.current-week-row {
-  background-color: #fff5e6;
-  border-left: 4px solid #2f80ed;
+  background-color: #e3f2fd;
+  border-left: 4px solid #90caf9;
 }
 
+/* Generic card component for section wrappers */
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+}
+
+/* Grid container used to place gauge and calendar side by side on larger screens */
+.grid-two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+header {
+  /* Light sticky header with backdrop blur */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  color: #0d47a1;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-label {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  background-color: #0d47a1;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.file-label input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+#toggle-cost {
+  background-color: #0d47a1;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#toggle-cost.active {
+  background-color: #083d77;
+  color: #fff;
+}
+
+main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+section h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  /* Primary colour for headings */
+  color: #0d3b66;
+}
+
+#reminders {
+  display: flex;
+  gap: 2rem;
+}
+
+.reminder-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reminder-section li {
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0;
+}
+
+#gauge-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#gauge-container {
+  background-color: #e8f4fb;
+  border-radius: 12px;
+  height: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#gauge-bar {
+  height: 100%;
+  width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+#gauge-bar.out-of-range {
+  background-color: #f57c00;
+}
+
+#gauge-label {
+  padding-right: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Colour states for the gauge bar based on monthly totals */
+#gauge-bar.low {
+  background-color: #fdd835;
+}
+#gauge-bar.good {
+  background-color: #66bb6a;
+}
+#gauge-bar.high {
+  background-color: #ef5350;
+}
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.day {
+  /* Consistent size and appearance for calendar cells */
+  min-height: 6rem;
+  border-radius: 12px;
+  padding: 0.4rem;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.day.other-month {
+  opacity: 0.4;
+}
+
+.day.today {
+  /* Override ring style for today cell */
+  box-shadow: 0 0 0 2px #2f80ed inset;
+}
+
+.day .date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.icons span {
+  margin-right: 0.25rem;
+}
+
+#weekly-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#weekly-table th,
+#weekly-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#weekly-table tr:last-child td {
+  border-bottom: none;
+}
+
+#campaign-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+#campaign-table th,
+#campaign-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#campaign-table tr:last-child td {
+  border-bottom: none;
+}
+
+#campaign-table tbody tr:hover {
+  background-color: #f0f4ff;
+}
+
+#campaign-table td {
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge.mail {
+  background-color: #2f80ed;
+}
+
+.badge.nomail {
+  background-color: #f57c00;
+}
+
+footer {
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Icons for reminder headings: check mark for current week, warning for next week */
+#reminders .reminder-section:first-of-type h2::before {
+  content: '✔';
+  margin-right: 0.35rem;
+}
+#reminders .reminder-section:nth-of-type(2) h2::before {
+  content: '⚠';
+  margin-right: 0.35rem;
+}
 
 /* Gauge info styles */
 .gauge-info {
