@@ -1,0 +1,241 @@
+/*
+ * Stylesheet for the Marketing Schedule Tracker
+ *
+ * These styles are largely adapted from the prototype provided by the user.
+ * The layout emphasises clarity and visual hierarchy with a modern, neutral
+ * colour palette. Current week rows and the current day are highlighted to
+ * orient the user. A toggle button allows cost columns to be shown or
+ * hidden, preserving screen space when cost data isn't relevant.
+ */
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+header {
+  background-color: #2f80ed;
+  color: #fff;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-label {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  background-color: #fff;
+  color: #2f80ed;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.file-label input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+#toggle-cost {
+  background-color: #fff;
+  color: #2f80ed;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#toggle-cost.active {
+  background-color: #2f80ed;
+  color: #fff;
+}
+
+main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+section h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2f80ed;
+}
+
+#reminders {
+  display: flex;
+  gap: 2rem;
+}
+
+.reminder-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reminder-section li {
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0;
+}
+
+#gauge-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#gauge-container {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  height: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#gauge-bar {
+  background-color: #76c893;
+  height: 100%;
+  width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+#gauge-bar.out-of-range {
+  background-color: #f57c00;
+}
+
+#gauge-label {
+  padding-right: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.day {
+  min-height: 5rem;
+  border-radius: 4px;
+  padding: 0.25rem;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+}
+
+.day.other-month {
+  opacity: 0.5;
+}
+
+.day.today {
+  border: 2px solid #2f80ed;
+}
+
+.day .date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.icons span {
+  margin-right: 0.25rem;
+}
+
+#weekly-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#weekly-table th,
+#weekly-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#weekly-table tr:last-child td {
+  border-bottom: none;
+}
+
+#campaign-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+#campaign-table th,
+#campaign-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#campaign-table tr:last-child td {
+  border-bottom: none;
+}
+
+#campaign-table tbody tr:hover {
+  background-color: #f0f4ff;
+}
+
+#campaign-table td {
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge.mail {
+  background-color: #2f80ed;
+}
+
+.badge.nomail {
+  background-color: #f57c00;
+}
+
+footer {
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+}
