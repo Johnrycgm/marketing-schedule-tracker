@@ -2,13 +2,15 @@
  * Marketing Schedule Tracker
  *
  * This script powers a simple dashboard for tracking mail campaigns and their
- * follow‑up activities. It parses a CSV file supplied by the user, derives
- * additional follow‑up events, and renders reminders, a progress gauge,
- * calendar, weekly mail counts and a campaign table. All logic is contained
- * in this file for ease of deployment as a static web page.
+ * follow‑up activities. It parses a CSV file supplied by the user or, if
+ * configured on the server, automatically fetches a CSV from a Google
+ * Sheets document via a Vercel serverless function. The dashboard derives
+ * additional follow‑up events and renders reminders, a progress gauge,
+ * calendar, weekly mail counts and a campaign table. All logic is
+ * contained in this file for ease of deployment as a static web page.
  */
 
-// When the DOM is ready, attach listeners and initialize defaults
+// When the DOM is ready, attach listeners, optionally load the sheet
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('file-input');
   const toggleCostBtn = document.getElementById('toggle-cost');
@@ -21,7 +23,36 @@ document.addEventListener('DOMContentLoaded', () => {
       col.style.display = show ? '' : 'none';
     });
   });
+
+  // Attempt to load data from the serverless API on page load. If the
+  // request fails (e.g. environment variables aren't configured or the
+  // sheet isn't public) the dashboard will remain empty until a CSV is
+  // uploaded manually by the user.
+  loadSheetFromAPI();
 });
+
+/**
+ * Attempt to fetch a CSV from the /api/sheet endpoint. If the fetch
+ * succeeds, parse the CSV and populate the dashboard. Errors are
+ * silently ignored so that users can still manually load a file if
+ * automatic loading isn't configured.
+ */
+async function loadSheetFromAPI() {
+  try {
+    const resp = await fetch('/api/sheet');
+    if (!resp.ok) {
+      throw new Error(`HTTP ${resp.status}`);
+    }
+    const text = await resp.text();
+    if (!text || text.trim() === '') return;
+    const data = parseCSV(text);
+    const records = transformRecords(data);
+    const tasks = deriveTasks(records);
+    updateDashboard(records, tasks);
+  } catch (err) {
+    console.warn('Could not load sheet from API', err);
+  }
+}
 
 /**
  * Handle CSV file selection: read the file and trigger parsing and UI update
@@ -135,7 +166,9 @@ function transformRecords(data) {
         .map((s) => s.trim())
         .filter((s) => s);
     }
-    const noMail = tags.some((t) => t.toLowerCase() === 'nomail') || (channels.length > 0 && !channels.some((c) => c.toLowerCase() === 'mail'));
+    const noMail =
+      tags.some((t) => t.toLowerCase() === 'nomail') ||
+      (channels.length > 0 && !channels.some((c) => c.toLowerCase() === 'mail'));
     records.push({
       date,
       campaign,
@@ -233,7 +266,7 @@ function updateDashboard(records, tasks) {
 function updateReminders(tasks, startDate, endDate, elementId) {
   const list = document.getElementById(elementId);
   list.innerHTML = '';
-  // Map by date+campaign
+  // Group tasks by date and campaign within range
   const grouping = {};
   tasks.forEach((task) => {
     if (task.date >= startDate && task.date <= endDate) {
@@ -244,20 +277,44 @@ function updateReminders(tasks, startDate, endDate, elementId) {
       grouping[key].types.add(task.type);
     }
   });
-  // Convert to sorted array
   const items = Object.values(grouping).sort((a, b) => a.date - b.date);
   items.forEach((item) => {
     const li = document.createElement('li');
-    const dateStr = item.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    const icons = [];
-    if (item.types.has('mail')) icons.push('✉️');
-    if (item.types.has('text')) icons.push('💬');
-    if (item.types.has('voicemail')) icons.push('🎙️');
-    li.textContent = `${dateStr} - ${item.campaign} `;
-    const span = document.createElement('span');
-    span.textContent = icons.join(' ');
-    span.style.marginLeft = '0.5rem';
-    li.appendChild(span);
+    li.className = 'reminder-item';
+    // Top line: date and campaign
+    const top = document.createElement('div');
+    top.className = 'top';
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'date';
+    dateSpan.textContent = item.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const campaignSpan = document.createElement('span');
+    campaignSpan.className = 'campaign';
+    campaignSpan.textContent = ` · ${item.campaign}`;
+    top.appendChild(dateSpan);
+    top.appendChild(campaignSpan);
+    li.appendChild(top);
+    // Types row with badges
+    const typesDiv = document.createElement('div');
+    typesDiv.className = 'types';
+    if (item.types.has('mail')) {
+      const spanMail = document.createElement('span');
+      spanMail.className = 'mail';
+      spanMail.textContent = 'Mail';
+      typesDiv.appendChild(spanMail);
+    }
+    if (item.types.has('text')) {
+      const spanText = document.createElement('span');
+      spanText.className = 'text';
+      spanText.textContent = 'Text';
+      typesDiv.appendChild(spanText);
+    }
+    if (item.types.has('voicemail')) {
+      const spanVM = document.createElement('span');
+      spanVM.className = 'voicemail';
+      spanVM.textContent = 'VM';
+      typesDiv.appendChild(spanVM);
+    }
+    li.appendChild(typesDiv);
     list.appendChild(li);
   });
   if (items.length === 0) {
@@ -298,11 +355,14 @@ function updateGauge(monthlyCounts) {
   bar.style.width = `${percent}%`;
   const label = document.getElementById('gauge-label');
   label.textContent = `${value.toLocaleString()} / 10,000`;
-  // Determine within target range 9000-10000
-  if (value >= 9000 && value <= 10000) {
-    bar.classList.remove('out-of-range');
+  // Apply colour state classes
+  bar.classList.remove('low', 'good', 'high', 'out-of-range');
+  if (value < 9000) {
+    bar.classList.add('low');
+  } else if (value <= 10000) {
+    bar.classList.add('good');
   } else {
-    bar.classList.add('out-of-range');
+    bar.classList.add('high');
   }
 }
 
@@ -336,7 +396,7 @@ function updateWeeklyTable(weeklyCounts, currentWeekStart) {
   weeks.forEach((weekStart) => {
     const tr = document.createElement('tr');
     if (weekStart.getTime() === currentWeekStart.getTime()) {
-      tr.style.backgroundColor = '#fff9c4';
+      tr.classList.add('current-week-row');
     }
     const tdDate = document.createElement('td');
     tdDate.textContent = weekStart.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
@@ -411,35 +471,52 @@ function renderCalendar(tasks, currentWeekStart) {
     dateDiv.className = 'date-number';
     dateDiv.textContent = cellDate.getDate();
     cell.appendChild(dateDiv);
-    // Tasks icons
-    const iconsDiv = document.createElement('div');
-    iconsDiv.className = 'task-icons';
-    const list = taskMap[cellDate.toDateString()];
-    if (list) {
-      // Determine presence of each type
-      const hasMail = list.some((t) => t.type === 'mail');
-      const hasText = list.some((t) => t.type === 'text');
-      const hasVM = list.some((t) => t.type === 'voicemail');
-      if (hasMail) {
-        const span = document.createElement('span');
-        span.className = 'mail';
-        span.textContent = '✉️';
-        iconsDiv.appendChild(span);
-      }
-      if (hasText) {
-        const span = document.createElement('span');
-        span.className = 'text';
-        span.textContent = '💬';
-        iconsDiv.appendChild(span);
-      }
-      if (hasVM) {
-        const span = document.createElement('span');
-        span.className = 'voicemail';
-        span.textContent = '🎙️';
-        iconsDiv.appendChild(span);
-      }
+    // Tasks list with campaign names and types
+    const tasksForDate = taskMap[cellDate.toDateString()];
+    if (tasksForDate) {
+      // Group by campaign name
+      const groups = {};
+      tasksForDate.forEach((t) => {
+        const key = t.record.campaign;
+        if (!groups[key]) {
+          groups[key] = { record: t.record, types: new Set() };
+        }
+        groups[key].types.add(t.type);
+      });
+      const listDiv = document.createElement('div');
+      listDiv.className = 'task-list';
+      Object.keys(groups)
+        .sort()
+        .forEach((campaign) => {
+          const info = groups[campaign];
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'task-item';
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'campaign';
+          nameSpan.textContent = campaign;
+          itemDiv.appendChild(nameSpan);
+          itemDiv.appendChild(document.createTextNode(': '));
+          const typesSpan = document.createElement('span');
+          typesSpan.className = 'types';
+          const typeNames = [];
+          if (info.types.has('mail')) typeNames.push('Mail');
+          if (info.types.has('text')) typeNames.push('Text');
+          if (info.types.has('voicemail')) typeNames.push('VM');
+          typeNames.forEach((type, idx) => {
+            const tSpan = document.createElement('span');
+            tSpan.className = type.toLowerCase();
+            tSpan.textContent = `${type}`;
+            typesSpan.appendChild(tSpan);
+            if (idx < typeNames.length - 1) {
+              const comma = document.createTextNode(', ');
+              typesSpan.appendChild(comma);
+            }
+          });
+          itemDiv.appendChild(typesSpan);
+          listDiv.appendChild(itemDiv);
+        });
+      cell.appendChild(listDiv);
     }
-    cell.appendChild(iconsDiv);
     calendar.appendChild(cell);
   }
 }
@@ -456,7 +533,9 @@ function updateCampaignTable(records, currentWeekStart, currentWeekEnd) {
   records.forEach((r) => {
     const tr = document.createElement('tr');
     // Highlight if mail or follow‑up falls in current week
-    const inWeek = (r.date >= currentWeekStart && r.date <= currentWeekEnd) || (r.followUpDate >= currentWeekStart && r.followUpDate <= currentWeekEnd);
+    const inWeek =
+      (r.date >= currentWeekStart && r.date <= currentWeekEnd) ||
+      (r.followUpDate >= currentWeekStart && r.followUpDate <= currentWeekEnd);
     if (inWeek) {
       tr.classList.add('current-week-row');
     }
