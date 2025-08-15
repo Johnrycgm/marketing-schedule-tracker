@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketing Schedule Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Marketing Schedule Tracker</h1>
+      <div id="controls">
+        <!-- The file input remains for manual CSV uploads if needed. -->
+        <label class="file-label">
+          <span>Load CSV</span>
+          <input type="file" id="file-input" accept=".csv" />
+        </label>
+        <button id="toggle-cost">Show Cost</button>
+      </div>
+    </header>
+    <main>
+      <section id="reminders">
+        <div class="reminder-section">
+          <h2>This Week</h2>
+          <ul id="current-week-tasks"></ul>
+        </div>
+        <div class="reminder-section">
+          <h2>Next Week</h2>
+          <ul id="next-week-tasks"></ul>
+        </div>
+      </section>
+      <section id="gauge-section">
+        <h2>Monthly Mail Target (9k–10k)</h2>
+        <div id="gauge-container">
+          <div id="gauge-bar">
+            <span id="gauge-label"></span>
+          </div>
+        </div>
+      </section>
+      <section id="calendar-section">
+        <h2>Calendar</h2>
+        <div id="calendar"></div>
+      </section>
+      <section id="weekly-section">
+        <h2>Weekly Mail Count</h2>
+        <table id="weekly-table">
+          <thead>
+            <tr>
+              <th>Week Starting</th>
+              <th>Mail Count</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section id="campaign-section">
+        <h2>Campaign Schedule</h2>
+        <table id="campaign-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Campaign</th>
+              <th>Category</th>
+              <th>Part</th>
+              <th>Count</th>
+              <th class="cost-column">Cost</th>
+              <th>Follow‑up</th>
+              <th>Channels</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+    <footer>
+      <p>
+        CSV Format: Date, Campaign, Count (required). Additional optional
+        fields supported: Category, Part, Batch, Cost, Channels, Tags,
+        "Red - Adjusted Dates". NoMail campaigns are scheduled for
+        Text+Voicemail on the specified date.
+      </p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
