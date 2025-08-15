@@ -217,8 +217,9 @@ section h2 {
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.15rem 0.4rem;
+
+display: inline-block;
+  paddng: 0.15rem 0.4rem;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -238,4 +239,120 @@ footer {
   font-size: 0.75rem;
   color: #666;
   text-align: center;
+}
+/* === Custom enhancements for professional design === */
+
+/* Card styling for main sections */
+main section {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced reminders styling */
+.reminder-item {
+  background-color: #f7f9fc;
+  border-left: 4px solid #2f80ed;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.reminder-item .top {
+  font-weight: 600;
+  color: #0d3b66;
+  margin-bottom: 0.25rem;
+}
+
+.reminder-item .top .campaign {
+  color: #333;
+}
+
+.reminder-item .types {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.reminder-item .types span {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.reminder-item .types .mail {
+  background-color: #2f80ed;
+}
+
+.reminder-item .types .text {
+  background-color: #27ae60;
+}
+
+.reminder-item .types .voicemail {
+  background-color: #b27aca;
+}
+
+/* Gauge bar colour states */
+#gauge-bar.low {
+  background-color: #f5c342;
+}
+
+#gauge-bar.good {
+  background-color: #76c893;
+}
+
+#gauge-bar.high {
+  background-color: #eb5757;
+}
+
+/* Calendar styles adjustments */
+.day.current-week {
+  background-color: #fff5e6;
+  border: 1px solid #ffe0b2;
+}
+
+.date-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0d3b66;
+}
+
+.task-list {
+  margin-top: 0.25rem;
+}
+
+.task-item {
+  font-size: 0.65rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+.task-item .campaign {
+  font-weight: 600;
+  color: #333;
+}
+
+.task-item .types {
+  margin-left: 0.25rem;
+}
+
+.task-item .types .mail {
+  color: #2f80ed;
+}
+
+.task-item .types .text {
+  color: #27ae60;
+}
+
+.task-item .types .voicemail {
+  color: #b27aca;
+}
+
+/* Highlight current week rows in tables */
+#weekly-table tbody tr.current-week-row,
+#campaign-table tbody tr.current-week-row {
+  background-color: #fff5e6;
+  border-left: 4px solid #2f80ed;
 }
