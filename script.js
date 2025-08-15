@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // request fails (e.g. environment variables aren't configured or the
   // sheet isn't public) the dashboard will remain empty until a CSV is
   // uploaded manually by the user.
+ 
   loadSheetFromAPI();
 });
 
@@ -97,6 +98,7 @@ function parseCSV(str) {
       } else {
         insideQuote = !insideQuote;
       }
+      
     } else if (char === ',' && !insideQuote) {
       row.push(current);
       current = '';
